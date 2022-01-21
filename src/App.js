@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Login from './components/Login/Login';
 import Home from './components/Home/Home';
 import MainHeader from './components/MainHeader/MainHeader';
 
 function App() {
-  const storedUserLoggedInINformation = localStorage.getItem('isLoggedIn');
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  ///this is data fetching that is a side effect with useEffect
+  useEffect(() => {
+    ///utilizing local strage to store the state of logged in
+    const storedUserLoggedInInformation = localStorage.getItem('isLoggedIn');
+
+    if (storedUserLoggedInInformation === '1') {
+      setIsLoggedIn(true);
+    }
+    //the [] box ensure that the useEffect hook will only run when the dependency's change
+    //This will only run once and update the DOM accordingly
+  }, []);
 
   const loginHandler = (email, password) => {
     // We should of course check email and password
     // But it's just a dummy/ demo anyways
-    localStorage.setItem('isLoggedin', '1');
+    localStorage.setItem('isLoggedIn', '1');
     setIsLoggedIn(true);
   };
 
   const logoutHandler = () => {
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };
 
