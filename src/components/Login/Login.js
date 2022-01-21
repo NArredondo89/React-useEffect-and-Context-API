@@ -5,7 +5,6 @@ import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 
 ///the inputs in action.type can be the same between emailReducer and passwordReducer
-
 const emailReducer = (state, action) => {
   if (action.type === 'USER_INPUT') {
     return { value: action.val, isValid: action.val.includes('@') };
