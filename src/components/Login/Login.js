@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+
+import AuthContext from '../store/auth-context';
 
 ///the inputs in action.type can be the same between emailReducer and passwordReducer
 const emailReducer = (state, action) => {
@@ -39,6 +41,7 @@ const Login = (props) => {
     isValid: null,
   });
 
+  const authCtx = useContext(AuthContext);
   ///create a variable so that the useEffect does not run after the isValid
   /// property is true (test on email to see effect. This is object destructuring
   /// the value is not an assignment but a new variable to be used in the
@@ -78,7 +81,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    authCtx.onLogin(emailState.value, passwordState.value);
   };
 
   return (
