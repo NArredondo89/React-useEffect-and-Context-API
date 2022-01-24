@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  useRef,
+} from 'react';
 
 import Card from '../UI/Card/Card';
 import Button from '../UI/Button/Button';
@@ -46,8 +52,12 @@ const Login = (props) => {
   /// property is true (test on email to see effect. This is object destructuring
   /// the value is not an assignment but a new variable to be used in the
   /// useEffect hook below
+
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
+
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
 
   useEffect(() => {
     const identifier = setTimeout(() => {
@@ -81,7 +91,14 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    authCtx.onLogin(emailState.value, passwordState.value);
+
+    if (formIsValid) {
+      authCtx.onLogin(emailState.value, passwordState.value);
+    } else if (!emailIsValid) {
+      emailInputRef.current.activate();
+    } else {
+      passwordInputRef.current.activate();
+    }
   };
 
   return (
@@ -91,12 +108,14 @@ const Login = (props) => {
           id="email"
           label="E-Mail"
           type="email"
+          ref={emailInputRef}
           isValid={emailIsValid}
           value={emailState.value}
           onChange={emailChangeHandler}
           onBlur={validateEmailHandler}
         />
         <Input
+          ref={passwordInputRef}
           id="password"
           label="Password"
           type="password"
